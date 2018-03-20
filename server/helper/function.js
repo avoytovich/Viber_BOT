@@ -1,12 +1,24 @@
 const http = require("http");
 const request = require('request');
+const ViberBot = require('viber-bot').Bot;
 const TextMessage = require('viber-bot').Message.Text;
 const winston = require('winston');
 const toYAML = require('winston-console-formatter');
 const rp = require('request-promise');
 const { message, reqExp } = require('./message');
 const { options } = require('./constant');
+const { secret } = require('./../../config/config.env');
 
+const createLogger = () => {
+  const logger = new winston.Logger({
+    level: "debug"
+  });
+  logger.add(winston.transports.Console, toYAML());
+  return logger;
+};
+
+const logger = createLogger();
+const bot = new ViberBot(logger, secret);
 
 const say = (response, message) => response.send(new TextMessage(message));
 
@@ -26,20 +38,20 @@ const checkUrlAvailability = (botResponse, urlToCheck) => {
       return;
     }
 
+    const phrase = ((phrase) => body.search(phrase) !== -1);
+
     if (!error && requestResponse.statusCode === 200) {
       switch(true) {
-        case body.search('is up') !== -1:
+        case phrase('is up'):
           say(botResponse, `Hooray! ${urlToCheck}. looks good to me.`);
           break;
-        case body.search('Huh') !== -1:
-          console.log('there');
+        case phrase('Huh'):
           say(botResponse, `Hmmmmm ${urlToCheck}. does not look like a website to me.`);
           break;
-        case body.search('down from here') !== -1 === true:
+        case phrase('down from here'):
           say(botResponse, `Oh no! ${urlToCheck}. is broken.`);
           break;
         default:
-          console.log('default', body.search('Huh') !== -1);
           return say(botResponse, message.somethingWrong);
       }
     }
@@ -87,15 +99,8 @@ const getPublicUrl = () => {
   });
 };
 
-const createLogger = () => {
-  const logger = new winston.Logger({
-    level: "debug"
-  });
-  logger.add(winston.transports.Console, toYAML());
-  return logger;
-};
-
 module.exports = {
+  bot,
   checkUrlAvailability,
   getPublicUrl,
   createLogger
