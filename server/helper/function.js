@@ -1,13 +1,11 @@
 const http = require("http");
 const request = require('request');
-const ViberBot = require('viber-bot').Bot;
 const TextMessage = require('viber-bot').Message.Text;
 const winston = require('winston');
 const toYAML = require('winston-console-formatter');
 const rp = require('request-promise');
 const { message, reqExp } = require('./message');
-const { options } = require('./constant');
-const { secret } = require('./../../config/config.env');
+const { options, messages } = require('./constant');
 
 const createLogger = () => {
   const logger = new winston.Logger({
@@ -18,7 +16,6 @@ const createLogger = () => {
 };
 
 const logger = createLogger();
-const bot = new ViberBot(logger, secret);
 
 const say = (response, message) => response.send(new TextMessage(message));
 
@@ -42,13 +39,13 @@ const checkUrlAvailability = (botResponse, urlToCheck) => {
 
     if (!error && requestResponse.statusCode === 200) {
       switch(true) {
-        case phrase('is up'):
+        case phrase(messages.urlExist):
           say(botResponse, `Hooray! ${urlToCheck}. looks good to me.`);
           break;
-        case phrase('Huh'):
+        case phrase(messages.urlNotExist):
           say(botResponse, `Hmmmmm ${urlToCheck}. does not look like a website to me.`);
           break;
-        case phrase('down from here'):
+        case phrase(messages.is_broken):
           say(botResponse, `Oh no! ${urlToCheck}. is broken.`);
           break;
         default:
@@ -100,7 +97,7 @@ const getPublicUrl = () => {
 };
 
 module.exports = {
-  bot,
+  logger,
   checkUrlAvailability,
   getPublicUrl,
   createLogger

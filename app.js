@@ -1,9 +1,6 @@
 const http = require('http');
-const { bot, getPublicUrl, checkUrlAvailability, createLogger } = require('./server/helper/function');
-
-bot.onTextMessage(/./, (message, response) => {
-  checkUrlAvailability(response, message.text);
-});
+const { getPublicUrl } = require('./server/helper/function');
+const { bot } = require('./server/helper/bot');
 
 getPublicUrl()
   .then((url) => {

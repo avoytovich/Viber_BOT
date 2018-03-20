@@ -8,6 +8,13 @@ const options = {
   }
 };
 
+const messages = {
+  urlExist: 'is up',
+  urlNotExist: 'Huh',
+  is_broken: 'down from here',
+}
+
 module.exports = {
-  options
+  options,
+  messages
 };
