@@ -1,21 +1,9 @@
 const http = require("http");
 const request = require('request');
 const TextMessage = require('viber-bot').Message.Text;
-const winston = require('winston');
-const toYAML = require('winston-console-formatter');
 const rp = require('request-promise');
 const { message, reqExp } = require('./message');
 const { options, messages } = require('./constant');
-
-const createLogger = () => {
-  const logger = new winston.Logger({
-    level: "debug"
-  });
-  logger.add(winston.transports.Console, toYAML());
-  return logger;
-};
-
-const logger = createLogger();
 
 const say = (response, message) => response.send(new TextMessage(message));
 
@@ -80,7 +68,6 @@ const getPublicUrl = () => {
   return new Promise((resolve, reject) => {
 
     const req = http.request(options, (res) => {
-      console.log('res', res);
       res.setEncoding('utf8');
       res.on('data', (config) => {
         config = JSON.parse(config);
@@ -97,8 +84,6 @@ const getPublicUrl = () => {
 };
 
 module.exports = {
-  logger,
   checkUrlAvailability,
-  getPublicUrl,
-  createLogger
+  getPublicUrl
 };

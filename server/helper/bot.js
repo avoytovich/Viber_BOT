@@ -1,6 +1,7 @@
 const ViberBot = require('viber-bot').Bot;
-const { logger, checkUrlAvailability } = require('./function');
+const { checkUrlAvailability } = require('./function');
 const { secret } = require('./../../config/config.env');
+const { logger } = require('./logger');
 
 const bot = new ViberBot(logger, secret);
 
