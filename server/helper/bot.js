@@ -9,6 +9,4 @@ bot.onTextMessage(/./, (message, response) => {
   checkUrlAvailability(response, message.text);
 });
 
-module.exports = {
-  bot
-};
+module.exports.bot = bot;
