@@ -1,6 +1,6 @@
 const http = require('http');
 const { getPublicUrl } = require('./server/helper/function');
-const { bot } = require('./server/helper/bot');
+const bot = require('./server/helper/bot');
 const { message } = require('./server/helper/message');
 
 getPublicUrl()
