@@ -2,16 +2,18 @@ const http = require('http');
 const ViberBot = require('viber-bot').Bot;
 const TextMessage = require('viber-bot').Message.Text;
 const request = require('request');
+const { secret } = require('./../../config/config.env');
+const logger = require('./logger');
 const { message, reqExp } = require('./message');
 const { options, messages } = require('./constant');
 
 class Bot extends ViberBot {
 
-  static say(response, message) {
+  say(response, message) {
       response.send(new TextMessage(message));
-    };
+    }
 
-  static checkUrlAvailability(botResponse, urlToCheck) {
+  checkUrlAvailability(botResponse, urlToCheck) {
     if (urlToCheck === '') {
       this.say(botResponse, message.urlCheck);
       return;
@@ -44,7 +46,7 @@ class Bot extends ViberBot {
         }
       }
     });
-  };
+  }
 
   getPublicUrl() {
 
@@ -55,6 +57,7 @@ class Bot extends ViberBot {
       uri: 'http://127.0.0.1:4040',
       json: true
     };
+
     return new Promise((resolve, reject) => {
 
       const req = http.request(options, (res) => {
@@ -72,8 +75,18 @@ class Bot extends ViberBot {
 
     });
 
-   };
+   }
 
 }
 
-module.exports = Bot;
+const bot = new Bot(logger, secret);
+
+bot.onTextMessage(/./, (message, response) => {
+  bot.checkUrlAvailability(response, message.text);
+});
+
+bot.getPublicUrl()
+      .then((url) => bot.setWebhook(url))
+      .catch((err) => console.log('err', err));
+
+module.exports = bot;
