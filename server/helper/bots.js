@@ -9,6 +9,11 @@ const { options, messages } = require('./constant');
 
 class Bot extends ViberBot {
 
+  constructor(logger,secret) {
+    super(logger,secret);
+    this.init();
+  }
+
   say(response, message) {
       response.send(new TextMessage(message));
     }
@@ -77,21 +82,15 @@ class Bot extends ViberBot {
 
   }
 
-  init() {
+  async init() {
 
-    this.getPublicUrl()
-      .then((url) => {
-        this.setWebhook(url);
-        this.url = url;
-      })
-      .catch((err) => console.log('err', err));
+    this.setWebhook(await this.getPublicUrl());
+
     }
 
 }
 
 const bot = new Bot(logger, secret);
-
-bot.init();
 
 bot.onTextMessage(/./, (message, response) => {
   bot.checkUrlAvailability(response, message.text);
