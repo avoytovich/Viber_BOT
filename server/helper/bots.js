@@ -84,7 +84,8 @@ class Bot extends ViberBot {
 
   async init() {
 
-    this.setWebhook(await this.getPublicUrl());
+    this.url = await this.getPublicUrl();
+    this.setWebhook(this.url);
 
     }
 
