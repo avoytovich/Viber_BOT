@@ -75,24 +75,26 @@ class Bot extends ViberBot {
 
     });
 
-   }
+  }
 
-   init() {
+  init() {
 
-    this.onTextMessage(/./, (message, response) => {
-      this.checkUrlAvailability(response, message.text);
-    });
-
-     this.getPublicUrl()
-       .then((url) => bot.setWebhook(url))
-       .catch((err) => console.log('err', err));
-
-   }
+    this.getPublicUrl()
+      .then((url) => {
+        this.setWebhook(url);
+        this.url = url;
+      })
+      .catch((err) => console.log('err', err));
+    }
 
 }
 
 const bot = new Bot(logger, secret);
 
 bot.init();
+
+bot.onTextMessage(/./, (message, response) => {
+  bot.checkUrlAvailability(response, message.text);
+});
 
 module.exports = bot;
