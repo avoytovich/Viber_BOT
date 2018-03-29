@@ -1,0 +1,12 @@
+{
+  "development": {
+    "authToken": "4786631b5e67d58a-35077f478e84bbbe-edaafc21eac23d7c",
+    "name": "Is It Up",
+    "avatar": "https://raw.githubusercontent.com/devrelv/drop/master/151-icon.png"
+  },
+  "production": {
+    "authToken": "4786631b5e67d58a-35077f478e84bbbe-edaafc21eac23d7c",
+    "name": "Is It Up",
+    "avatar": "https://raw.githubusercontent.com/devrelv/drop/master/151-icon.png"
+  }
+}
